@@ -3,13 +3,13 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
-subtitle: ''
+title: TANE blog
+subtitle: 'たねのブログです。'
 description: ''
 keywords:
-author: John Doe
-language: jp
-timezone: ''
+author: tanetakumi
+language: ja
+timezone: asia/Tokyo
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
@@ -101,9 +101,12 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: landscape
+theme: light
 
 # Deployment
-## Docs: https://hexo.io/docs/one-command-deployment
+## Docs: https://hexo.io/doc  s/deployment.html
 deploy:
-  type: ''
+  type: git
+  repo: git@github.com:tanetakumi/taneblog.git
+  branch: gh-pages
+  message: "Site updated: {{ now('YYYY-MM-DD HH:mm:ss') }} [skip ci]"
