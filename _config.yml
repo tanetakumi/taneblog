@@ -110,3 +110,5 @@ deploy:
   repo: git@github.com:tanetakumi/taneblog.git
   branch: gh-pages
   message: "Site updated: {{ now('YYYY-MM-DD HH:mm:ss') }} [skip ci]"
+
+favicon: favicon.ico
