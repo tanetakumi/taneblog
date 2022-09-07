@@ -107,7 +107,7 @@ theme: light
 ## Docs: https://hexo.io/doc  s/deployment.html
 deploy:
   type: git
-  repo: git@github.com:tanetakumi/taneblog.git
+  repo: https://github.com/tanetakumi/taneblog
   branch: gh-pages
   message: "Site updated: {{ now('YYYY-MM-DD HH:mm:ss') }} [skip ci]"
 
