@@ -3,7 +3,7 @@ menu:
   Home: /
   Archives: /archives
 rss: /atom.xml
-# banner: images/banner.jpg
+banner: ../images/banner.jpg
 subtitle: This a subtitle
 
 # Content
@@ -26,5 +26,5 @@ sidebar: right
 
 # Miscellaneous
 google_analytics:
-# favicon: /favicon.png
+favicon: /icons/favicon.png
 twitter:

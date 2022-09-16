@@ -101,7 +101,7 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: light
+theme: landscape
 
 # Deployment
 ## Docs: https://hexo.io/doc  s/deployment.html
@@ -111,7 +111,6 @@ deploy:
   branch: gh-pages
   message: "Site updated: {{ now('YYYY-MM-DD HH:mm:ss') }} [skip ci]"
 
-favicon: favicon.ico
 
 alias:
   ok-google/index.html: 2022/09/cl7r70jtx0000hwtobzjk3bj6/index.html
