@@ -13,7 +13,7 @@ timezone: asia/Tokyo
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: http://localhost:4000/taneblog
+url: https://tanetakumi.github.io/taneblog/
 root: /taneblog/
 permalink: :year/:month/:id/
 permalink_defaults:
