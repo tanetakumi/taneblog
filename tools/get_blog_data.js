@@ -1,15 +1,23 @@
 const fs = require('fs');
 const path = require('path');
 
+const dir = './source/_posts'
 
 const allNames = fs.readdirSync('./source/_posts');
 const files = allNames.filter(file => /.*\.md$/.test(file));  
-
+/*
 var test = fs.readFileSync('./source/_posts/second.md', 'utf8');
 
 console.log(test);
+*/
 
-
+for(var i in files){
+    console.log(files[i]);
+    var data = fs.readFileSync(dir + '/' + files[i], 'utf8');
+    var id_inp = data.match(/id:.+/g) ?? [''];
+    var id = id_inp[0].replace(/id:|\s/g, '');
+    console.log(id) 
+}
 
 /*
 for(var i in files){
