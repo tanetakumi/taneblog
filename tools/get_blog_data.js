@@ -1,22 +1,35 @@
 const fs = require('fs');
 const path = require('path');
+const yaml = require("js-yaml");
+// このファイルのディレクトリ
+const thisFileDir = path.dirname(process.argv[1]);
 
-const dir = './source/_posts'
+// source/_posts のターゲットディレクトリ
+const dir = path.join(thisFileDir, '..', 'source','_posts');
 
-const allNames = fs.readdirSync('./source/_posts');
+
+const allNames = fs.readdirSync(dir);
 const files = allNames.filter(file => /.*\.md$/.test(file));  
-/*
-var test = fs.readFileSync('./source/_posts/second.md', 'utf8');
-
-console.log(test);
-*/
 
 for(var i in files){
-    console.log(files[i]);
-    var data = fs.readFileSync(dir + '/' + files[i], 'utf8');
+
+    var data = fs.readFileSync(path.join(dir, files[i]), 'utf8');
+    console.log(path.join(dir, files[i]));
+    var header = data.match(/^---[\s\S]+?---/) ?? [''];
+    var data1 = yaml.load(header[0].replace(/^-+|-+$/g, ''), {
+        schema: yaml.JSON_SCHEMA
+    });
+    console.log(data1);
+    //console.log(header[0].replace(/^-+|-+$/g, ''));
+    //var hyaml = header[0].replace('---', '');
+    //console.log(hyaml);
+    /*
     var id_inp = data.match(/id:.+/g) ?? [''];
     var id = id_inp[0].replace(/id:|\s/g, '');
-    console.log(id) 
+    console.log('-----');
+    console.log('filename:\t'+files[i]);
+    console.log('blogid:\t\t'+id);
+    */
 }
 
 /*
