@@ -65,40 +65,35 @@ function csv_import(){
 
         delete tags_json['alias'];
         tags_json['tags'] = csvData[i]['tags']
-        
+
         data = data.replace(/^---[\s\S]+?---/, '---\n' + yaml.dump(tags_json) + '\n---');
 
         console.log(data);
     }
+}
 
-    /*
+function get_alias(){
+
+    let aliasData = [];
     const allNames = fs.readdirSync(postsDir);
     const files = allNames.filter(file => /.*\.md$/.test(file));  
     for(var i in files){
 
         var data = fs.readFileSync(path.join(postsDir, files[i]), 'utf8');
 
-        // 操作
-        console.log(path.join(postsDir, files[i]));
-
         // json の取得
         var header = data.match(/^---[\s\S]+?---/) ?? [''];
         var tags_json = yaml.load(header[0].replace(/^-+|-+$/g, ''), {
             schema: yaml.JSON_SCHEMA
         });
-
-        delete tags_json['alias'];
-        if(tags_json['tags'] === null || tags_json['tags'] === undefined){
-            tags_json['tags'] = [];
+        
+        if(tags_json['alias'] !== null){
+            var title = (tags_json['title'] ?? '').replace(/ /g, '%20');
+            var id = tags_json['id'] ?? '';
+            aliasData.push(title+'/index.html: '+id+'/index.html');
         }
-
-        //console.log(tags_json);
-
-        data = data.replace(/^---[\s\S]+?---/, '---\n' + yaml.dump(tags_json) + '\n---');
-
-        console.log(data);
-
-    }*/
+    }
+    fs.writeFileSync( path.join(thisFileDir,'alias_config.txt'), aliasData.join('\n'), 'utf8');
 }
 
 function read_csv(){
@@ -116,4 +111,4 @@ function read_csv(){
 //var re = read_csv();
 
 //console.log(re);
-csv_import();
+get_alias();
