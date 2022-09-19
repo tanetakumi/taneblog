@@ -2,11 +2,17 @@ const fs = require('fs');
 const path = require('path');
 const yaml = require("js-yaml");
 const csv = require("csv");
+const {parse} = require('csv-parse/sync');
+
 // このファイルのディレクトリ
 const thisFileDir = path.dirname(process.argv[1]);
 
-// source/_posts のターゲットディレクトリ
-const dir = path.join(thisFileDir, '..', 'source','_posts');
+// 記事があるディレクトリ source/_posts
+const postsDir = path.join(thisFileDir, '..', 'source','_posts');
+
+// csv のディレクトリ
+const csvDir = path.join(thisFileDir,'out.csv');
+
 
 
 function csv_export(){
@@ -14,14 +20,14 @@ function csv_export(){
     //変換後の配列を格納
     let newData = [];
     newData.push(['title', 'id', 'tags', 'filename', 'user']);
-    const allNames = fs.readdirSync(dir);
+    const allNames = fs.readdirSync(postsDir);
     const files = allNames.filter(file => /.*\.md$/.test(file));  
     for(var i in files){
 
-        var data = fs.readFileSync(path.join(dir, files[i]), 'utf8');
+        var data = fs.readFileSync(path.join(postsDir, files[i]), 'utf8');
 
         // 操作
-        console.log(path.join(dir, files[i]));
+        console.log(path.join(postsDir, files[i]));
 
         // json の取得
         var header = data.match(/^---[\s\S]+?---/) ?? [''];
@@ -46,14 +52,34 @@ function csv_export(){
 
 function csv_import(){
     
-    const allNames = fs.readdirSync(dir);
+    const csvData = read_csv();
+
+    for (var i in csvData){
+        var data = fs.readFileSync(path.join(postsDir, csvData[i]['filename']), 'utf8');
+
+        // json の取得
+        var header = data.match(/^---[\s\S]+?---/) ?? [''];
+        var tags_json = yaml.load(header[0].replace(/^-+|-+$/g, ''), {
+            schema: yaml.JSON_SCHEMA
+        });
+
+        delete tags_json['alias'];
+        tags_json['tags'] = csvData[i]['tags']
+        
+        data = data.replace(/^---[\s\S]+?---/, '---\n' + yaml.dump(tags_json) + '\n---');
+
+        console.log(data);
+    }
+
+    /*
+    const allNames = fs.readdirSync(postsDir);
     const files = allNames.filter(file => /.*\.md$/.test(file));  
     for(var i in files){
 
-        var data = fs.readFileSync(path.join(dir, files[i]), 'utf8');
+        var data = fs.readFileSync(path.join(postsDir, files[i]), 'utf8');
 
         // 操作
-        console.log(path.join(dir, files[i]));
+        console.log(path.join(postsDir, files[i]));
 
         // json の取得
         var header = data.match(/^---[\s\S]+?---/) ?? [''];
@@ -71,38 +97,23 @@ function csv_import(){
         data = data.replace(/^---[\s\S]+?---/, '---\n' + yaml.dump(tags_json) + '\n---');
 
         console.log(data);
-        //console.log(yaml.dump(tags_json));
-        //console.log((data.match(/こんにちは.+?です/) ?? [''])[0].replace(/^-+|-+$/g, ''));
 
-        // 書き込み
+    }*/
+}
+
+function read_csv(){
+    // csvファイルの内容を読み込み
+    const fileData = fs.readFileSync(csvDir);
+    // csvファイルをパース
+    const records = parse(fileData, { columns: true });
+    // tags 要素の整形
+    for (var j in records) {
+        records[j]['tags'] =  records[j]['tags'].split(',')
     }
+    return records;
 }
 
-csv_export();
+//var re = read_csv();
 
-/*
-for(var i in files){
-    console.log(files[i]);
-    fs.readFile('./source/_posts/'+files[i], 'utf8', function(err, data) {
-        //console.log(data);
-        var id_inp = data.match(/id:.+/g) ?? [''];
-        var id = id_inp[0].replace(/id:|\s/g, '');
-        console.log(id) 
-            
-    })
-}
-
-var filelist;
-fs.readdir('./source/_posts', "utf-8", function(err, files){
-    if (err) throw err;
-    filelist = files.filter(function(file){
-        return /.*\.md$/.test(file); //絞り込み
-    })
-});
-console.log(filelist);
-
-
-fs.readFile("../source/_post/tags_json.txt", "utf-8", (err, data) => {
-    if (err) throw err;
-    console.log(data);
-  });*/
+//console.log(re);
+csv_import();
